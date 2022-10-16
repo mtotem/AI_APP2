@@ -49,17 +49,33 @@ def avgBlue(img):
     """
     return img[:,:,2].mean()
 
-def highestChannel(img):
+def frequencyPeakRedRGB(img):
     """
-    Get channel with highest mean
+    Get the most frequent value in the blue channel
     """
-    return np.max([img[:,:,0].mean(), img[:,:,1].mean(), img[:,:,2].mean()])
+    unique, counts = np.unique(img[:,:,0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
 
-def highestChannel(img):
+def frequencyPeakGreenRGB(img):
     """
-    Get channel with lowest mean
+    Get the most frequent value in the blue channel
     """
-    return np.max([img[:,:,0].mean(), img[:,:,1].mean(), img[:,:,2].mean()])
+    unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def frequencyPeakBlueRGB(img):
+    """
+    Get the most frequent value in the blue channel
+    """
+    unique, counts = np.unique(img[:,:,2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+
+
+
 
 
 class ImageCollection:
@@ -92,7 +108,7 @@ class ImageCollection:
         Creates scatter plots for different component combinations
         """
 
-        func_list1=[avgBlue]
+        func_list1=[frequencyPeakGreen]
         func_list2=[mean]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]

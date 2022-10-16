@@ -1,0 +1,21 @@
+Idee de composante
+
+Moyenne de tout les canaux
+Ecart type de tout les canaux
+
+Moyenne du canal rouge
+Moyenne du canal vert
+Moyenne du canal bleu
+
+Peak de frequence (histogramme) rouge RGB
+Peak de frequence (histogramme) vert  RGB
+Peak de frequence (histogramme) bleu  RGB
+
+Peak de frequence (histogramme) cyan CMYK
+Peak de frequence (histogramme) magenta  CMYK
+Peak de frequence (histogramme) jaune  CMYK
+Peak de frequence (histogramme) noir  CMYK
+
+REFAIRE TOUT DANS Ycbcr
+
+
