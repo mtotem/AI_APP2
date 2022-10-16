@@ -18,4 +18,8 @@ Peak de frequence (histogramme) noir  CMYK
 
 REFAIRE TOUT DANS Ycbcr
 
+Split image en section
+
+Uniformite de l'image
+
 
