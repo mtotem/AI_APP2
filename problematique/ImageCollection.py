@@ -119,9 +119,24 @@ class ImageCollection:
         forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
         street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
 
+        street_component = np.zeros((street_img.shape[0], 2))
+        forest_component = np.zeros((forest_img.shape[0], 2))
+        coast_component = np.zeros((coast_img.shape[0], 2))
         values = np.array([])
         for func in functions:
-                values = values.stack(values, [func()])
+            for id, img in enumerate(street_img):
+                street_component[id] = func(img)
+
+            for id, img in enumerate(street_img):
+                forest_component[id] = func(img)
+
+            for id, img in enumerate(street_img):
+                coast_component[id] = func(img)
+            values = values.stack(values, [street_component, forest_component, coast_component])
+
+        mat_cov_coast = np.cov(values[2])
+        mat_cov_forest = np.cov(values[1])
+        mat_cov_street = np.cov(values[0])
 
     def images_display(indexes):
         """
