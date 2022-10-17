@@ -49,6 +49,15 @@ def avgBlue(img):
     """
     return img[:,:,2].mean()
 
+def frequencyPeakRedRGB(img):
+    """
+    Get the most frequent value in the blue channel
+    """
+    unique, counts = np.unique(img[:,:,0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def frequencyPeakGreenRGB(img):
 def maxPeakRed(img):
     """
     Gets max peak of blue
@@ -72,15 +81,23 @@ def maxPeakBlue(img):
 
 def highestChannel(img):
     """
-    Get channel with highest mean
+    Get the most frequent value in the blue channel
     """
-    return np.max([img[:,:,0].mean(), img[:,:,1].mean(), img[:,:,2].mean()])
+    unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
 
-def highestChannel(img):
+def frequencyPeakBlueRGB(img):
     """
-    Get channel with lowest mean
+    Get the most frequent value in the blue channel
     """
-    return np.max([img[:,:,0].mean(), img[:,:,1].mean(), img[:,:,2].mean()])
+    unique, counts = np.unique(img[:,:,2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+
+
+
 
 
 class ImageCollection:

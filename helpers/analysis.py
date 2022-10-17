@@ -113,15 +113,20 @@ def view_classes(data, extent, border_coeffs=None):
     #  TODO: rendre général, seulement 3 classes pour l'instant
     # colorpoints = ['orange', 'purple', 'black']
     colorpoints = ['red', 'green', 'blue']
-    colorfeatures = ['maroon', 'lime', 'cornflowerblue']
+    colorfeatures = ['tomato', 'lime', 'cornflowerblue']
 
     handles=[]
     for i in range(dims[0]):
         tempdata = data[i]
         m, cov, valpr, vectprop = calcModeleGaussien(tempdata)
         handles.append(ax1.scatter(tempdata[:, 0], tempdata[:, 1], s=5, c=colorpoints[i]))
-        ax1.scatter(m[0], m[1], c=colorfeatures[i])
+        #ax1.scatter(m[0], m[1], c=colorfeatures[i], s=60)
         viewEllipse(tempdata, ax1, edgecolor=colorfeatures[i])
+
+    for i in range(dims[0]):
+        tempdata = data[i]
+        m, cov, valpr, vectprop = calcModeleGaussien(tempdata)
+        ax1.scatter(m[0], m[1], c=colorfeatures[i], s=60)
 
     ax1.legend(handles,
               ('Coast', 'Forest', 'Street'),
