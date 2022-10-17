@@ -58,6 +58,28 @@ def frequencyPeakRedRGB(img):
     return unique[max_index]
 
 def frequencyPeakGreenRGB(img):
+def maxPeakRed(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,0], bins=256)
+    return x[np.where(y == y.max())]
+
+def maxPeakGreen(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,1], bins=256)
+    return x[np.where(y == y.max())]
+
+def maxPeakBlue(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,2], bins=50, range=(0, 255), density=True)
+    return x[np.where(y == y.max())]
+
+def highestChannel(img):
     """
     Get the most frequent value in the blue channel
     """
@@ -108,8 +130,8 @@ class ImageCollection:
         Creates scatter plots for different component combinations
         """
 
-        func_list1=[frequencyPeakGreen]
-        func_list2=[mean]
+        func_list1=[maxPeakBlue]
+        func_list2=[avgRed]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]
 
