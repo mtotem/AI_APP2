@@ -15,10 +15,11 @@ from ImageCollection import ImageCollection
 def main():
     # Génère une liste de N images, les visualise et affiche leur histo de couleur
     # TODO: voir L1.E3 et problématique
-    N = 5
-    im_list = np.sort(random.sample(range(np.size(ImageCollection.image_list, 0)), N))
-    print(im_list)
-    ImageCollection.view_scatter()
+    #N = 5
+    #im_list = np.sort(random.sample(range(np.size(ImageCollection.image_list, 0)), N))
+    #print(im_list)
+    #ImageCollection.view_scatter()
+    ImageCollection.covariance()
     # ImageCollection.images_display(im_list)
     # ImageCollection.view_histogrammes(im_list)
     plt.show()

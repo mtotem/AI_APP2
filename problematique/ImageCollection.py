@@ -147,11 +147,18 @@ class ImageCollection:
 
             for id, img in enumerate(street_img):
                 coast_component[id] = func(img)
-            values = values.stack(values, [street_component, forest_component, coast_component])
+            values = values.vstack(values, [street_component, forest_component, coast_component])
 
         mat_cov_coast = np.cov(values[2])
         mat_cov_forest = np.cov(values[1])
         mat_cov_street = np.cov(values[0])
+
+        ax1 = plt.subplot(3, 1, 1)
+        ax1.matshow(mat_cov_coast)
+        ax2 = plt.subplot(3, 1, 2)
+        ax2.matshow(mat_cov_forest)
+        ax3 = plt.subplot(3, 1, 3)
+        ax3.matshow(mat_cov_street)
 
     def images_display(indexes):
         """
