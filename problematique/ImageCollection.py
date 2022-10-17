@@ -140,6 +140,14 @@ def frequencyPeakcb(img):
     unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
     max_index = np.argmax(counts)
     return unique[max_index]
+def frequencyPeakcr(img):
+    """
+    Get the most frequent value in the cr channel in Ycbcr color space
+    """
+    img=skic.rgb2ycbcr(img)
+    unique, counts = np.unique(img[:,:,2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
 
 def upperLeftAvgRed(img):
     """
@@ -258,7 +266,7 @@ def upperRightHistGreen(img):
     Gets max peak of green in upper Right corner
 def frequencyPeakcr(img):
     """
-    Get the most frequent value in the cr channel in Ycbcr color space
+
     y, x = np.histogram(img[128:,:127,1], bins=20)
     return x[np.where(y == y.max())]
 
