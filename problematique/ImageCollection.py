@@ -19,6 +19,7 @@ from skimage import io as skiio
 import helpers.analysis as an
 import helpers.classifiers as classifiers
 from functions import *
+import functions
 
 class ImageCollection:
     """
@@ -49,13 +50,24 @@ class ImageCollection:
         """
         Creates scatter plots for different component combinations
         """
+        print(dir(functions))
+        funclist=[avgBlue, avgGreen, avgRed, avgY, avgcb, avgcr, frequencyPeakBlueRGB, frequencyPeakGreenRGB,
+                  frequencyPeakRedRGB, frequencyPeakY, frequencyPeakcb, frequencyPeakcr, lowerLeftAvgBlue, lowerLeftAvgGreen,
+                  lowerLeftAvgRed, lowerLeftHFBlue, lowerLeftHFGreen, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen,
+                  lowerLeftHistRed, lowerRightAvgBlue, lowerRightAvgGreen, lowerRightAvgRed, lowerRightHFBlue, lowerRightHFGreen,
+                  lowerRightHFRed, lowerRightHistBlue, lowerRightHistGreen, lowerRightHistRed, maxPeakBlue, maxPeakGreen, maxPeakRed,
+                  mean, meanYcbcr, std, stdYcbcr, upperLeftAvgBlue, upperLeftAvgGreen, upperLeftAvgRed, upperLeftHFBlue,
+                  upperLeftHFGreen, upperLeftHFRed, upperLeftHistBlue, upperLeftHistGreen, upperLeftHistRed, upperRightAvgBlue,
+                  upperRightAvgGreen, upperRightAvgRed, upperRightHFBlue, upperRightHFGreen, upperRightHFRed, upperRightHistBlue,
+                  upperRightHistGreen, upperRightHistRed]
+        func_list1=funclist[0:int(len(funclist)/2)]
+        func_list2=funclist[int(len(funclist)/2):len(funclist)-1]
 
-        func_list1=[upperRightAvgBlue]
-        func_list2=[upperRightAvgGreen]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]
 
         for i in range(len(func_list1)):
+            print(i)
             func1=func_list1[i]
             func2=func_list2[i]
 
@@ -66,6 +78,7 @@ class ImageCollection:
             coast_component=np.zeros((coast_img.shape[0],2))
             for id, img in enumerate(coast_img):
                 coast_component[id][0] = func1(img)
+                a=func2(img)
                 coast_component[id][1] = func2(img)
 
             forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])

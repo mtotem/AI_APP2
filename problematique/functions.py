@@ -1,3 +1,6 @@
+from skimage import color as skic
+import numpy as np
+
 def mean(img):
     """
     Returns the average of all values
@@ -57,21 +60,21 @@ def maxPeakRed(img):
     Gets max peak of red
     """
     y, x = np.histogram(img[:,:,0], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def maxPeakGreen(img):
     """
     Gets max peak of green
     """
     y, x = np.histogram(img[:,:,1], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def maxPeakBlue(img):
     """
     Gets max peak of blue
     """
     y, x = np.histogram(img[:,:,2], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def meanYcbcr(img):
     """
@@ -175,21 +178,21 @@ def upperLeftHistRed(img):
     Gets max peak of red in upper left corner
     """
     y, x = np.histogram(img[:127,:127,0], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def upperLeftHistGreen(img):
     """
     Gets max peak of green in upper left corner
     """
     y, x = np.histogram(img[:127,:127,1], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def upperLeftHistBlue(img):
     """
     Gets max peak of blue in upper left corner
     """
     y, x = np.histogram(img[:127,:127,2], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def upperRightAvgRed(img):
     """
@@ -238,7 +241,7 @@ def upperRightHistRed(img):
     Gets max peak of red in upper Right corner
     """
     y, x = np.histogram(img[128:,:127,0], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def upperRightHistGreen(img):
     """
@@ -247,7 +250,7 @@ def frequencyPeakcr(img):
     """
 
     y, x = np.histogram(img[128:,:127,1], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def upperRightHistBlue(img):
     """
@@ -256,7 +259,7 @@ def upperRightHistBlue(img):
     Gets max peak of blue in upper Right corner
     """
     y, x = np.histogram(img[128:,:127,2], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerLeftAvgRed(img):
     """
@@ -305,21 +308,21 @@ def lowerLeftHistRed(img):
     Gets max peak of red in lower left corner
     """
     y, x = np.histogram(img[:127,128:,0], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerLeftHistGreen(img):
     """
     Gets max peak of green in lower left corner
     """
     y, x = np.histogram(img[:127,128:,1], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerLeftHistBlue(img):
     """
     Gets max peak of blue in lower left corner
     """
     y, x = np.histogram(img[:127,128:,2], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerRightAvgRed(img):
     """
@@ -368,18 +371,18 @@ def lowerRightHistRed(img):
     Gets max peak of red in lower Right corner
     """
     y, x = np.histogram(img[128:,128:,0], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerRightHistGreen(img):
     """
     Gets max peak of green in lower Right corner
     """
     y, x = np.histogram(img[128:,128:,1], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
 
 def lowerRightHistBlue(img):
     """
     Gets max peak of blue in lower Right corner
     """
     y, x = np.histogram(img[128:,128:,2], bins=20)
-    return x[np.where(y == y.max())]
+    return x[np.where(y == y.max())][0]
