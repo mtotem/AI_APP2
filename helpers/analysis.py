@@ -94,7 +94,7 @@ def viewEllipse(data, ax, scale=1, facecolor='none', edgecolor='red', **kwargs):
     return ax.add_patch(ellipse)
 
 
-def view_classes(data, extent, border_coeffs=None):
+def view_classes(data, extent, border_coeffs=None, title=None):
     """
     Affichage des classes dans data
     *** Fonctionne pour des classes 2D
@@ -108,8 +108,10 @@ def view_classes(data, extent, border_coeffs=None):
     dims = np.asarray(data).shape
 
     fig1, ax1 = plt.subplots(1, 1)
-    ax1.set_title(r'Visualisation des classes, des ellipses à distance 1$\sigma$' + ('et des frontières' if border_coeffs is not None else ''))
-
+    if title is None:
+        ax1.set_title(r'Visualisation des classes, des ellipses à distance 1$\sigma$' + ('et des frontières' if border_coeffs is not None else ''))
+    else :
+        ax1.set_title(title)
     #  TODO: rendre général, seulement 3 classes pour l'instant
     # colorpoints = ['orange', 'purple', 'black']
     colorpoints = ['red', 'green', 'blue']

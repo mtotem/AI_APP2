@@ -114,7 +114,9 @@ class ImageCollection:
             y_min=np.min([np.min(coast_component[:,1]),np.min(forest_component[:,1]),np.min(street_component[:,1])])*.09
             y_max=np.max([np.max(coast_component[:,1]),np.max(forest_component[:,1]),np.max(street_component[:,1])])*1.1
 
-            an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max))
+            title=f"{func2.__name__} en fonction de {func1.__name__}"
+
+            an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max),title=title)
 
     def covariance():
         functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,
