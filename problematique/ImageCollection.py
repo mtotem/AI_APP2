@@ -103,6 +103,26 @@ class ImageCollection:
 
             an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max))
 
+    def covariance():
+        functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,
+                     frequencyPeakRedRGB, frequencyPeakGreenRGB, frequencyPeakY, frequencyPeakcb,
+                     frequencyPeakcr, maxPeakRed, maxPeakBlue, maxPeakGreen, upperRightAvgBlue,
+                     upperRightAvgGreen, upperRightAvgRed, upperRightHFBlue, upperRightHFGreen, upperRightHFRed,
+                     upperRightHistGreen, upperRightHistGreen, upperRightHistBlue, upperLeftAvgRed, upperLeftAvgGreen,
+                     upperLeftAvgBlue, upperLeftHFGreen, upperLeftHFBlue, upperLeftHFRed, upperLeftHistBlue,
+                     upperLeftHistGreen, upperLeftHistRed, lowerRightAvgBlue, lowerRightAvgGreen, lowerRightAvgRed,
+                     lowerRightHFGreen, lowerRightHFRed, lowerRightHFBlue, lowerRightHistBlue, lowerRightHistGreen,
+                     lowerRightHistRed, lowerLeftAvgGreen, lowerLeftAvgBlue, lowerLeftAvgRed, lowerLeftHFGreen,
+                     lowerLeftHFBlue, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen, lowerLeftHistRed]
+
+        coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
+        forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
+        street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
+
+        values = np.array([])
+        for func in functions:
+                values = values.stack(values, [func()])
+
     def images_display(indexes):
         """
         fonction pour afficher les images correspondant aux indices

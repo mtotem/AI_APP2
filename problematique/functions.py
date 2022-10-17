@@ -1,3 +1,6 @@
+from skimage import color as skic
+import numpy as np
+
 def mean(img):
     """
     Returns the average of all values
