@@ -58,32 +58,10 @@ def frequencyPeakRedRGB(img):
     return unique[max_index]
 
 def frequencyPeakGreenRGB(img):
-def maxPeakRed(img):
-    """
-    Gets max peak of blue
-    """
-    y, x = np.histogram(img[:,:,0], bins=256)
-    return x[np.where(y == y.max())]
-
-def maxPeakGreen(img):
-    """
-    Gets max peak of blue
-    """
-    y, x = np.histogram(img[:,:,1], bins=256)
-    return x[np.where(y == y.max())]
-
-def maxPeakBlue(img):
-    """
-    Gets max peak of blue
-    """
-    y, x = np.histogram(img[:,:,2], bins=50, range=(0, 255), density=True)
-    return x[np.where(y == y.max())]
-
-def highestChannel(img):
     """
     Get the most frequent value in the blue channel
     """
-    unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
+    unique, counts = np.unique(img[:, :, 1].flatten(), return_counts=True)
     max_index = np.argmax(counts)
     return unique[max_index]
 
@@ -95,7 +73,286 @@ def frequencyPeakBlueRGB(img):
     max_index = np.argmax(counts)
     return unique[max_index]
 
+def maxPeakRed(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,0], bins=20)
+    return x[np.where(y == y.max())]
 
+def maxPeakGreen(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,1], bins=20)
+    return x[np.where(y == y.max())]
+
+def maxPeakBlue(img):
+    """
+    Gets max peak of blue
+    """
+    y, x = np.histogram(img[:,:,2], bins=20)
+    return x[np.where(y == y.max())]
+
+def highestChannel(img):
+    """
+    Get the most frequent value in the blue channel
+    """
+    unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperLeftAvgRed(img):
+    """
+    Gets the avg of red in the left upper image
+    """
+    return img[:127, :127, 0].mean()
+
+def upperLeftAvgGreen(img):
+    """
+    Gets the avg of green in the left upper image
+    """
+    return img[:127, :127, 1].mean()
+
+def upperLeftAvgBlue(img):
+    """
+    Gets the avg of blue in the left upper image
+    """
+    return img[:127, :127, 2].mean()
+
+def upperLeftHFRed(img):
+    """
+    Gets the Highest frequency of red in upper left
+    """
+    unique, counts = np.unique(img[:127, :127, 0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperLeftHFGreen(img):
+    """
+    Gets the Highest frequency of green in the left upper image
+    """
+    unique, counts = np.unique(img[:127, :127, 1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperLeftHFBlue(img):
+    """
+    Gets the Highest frequency of blue in the left upper image
+    """
+    unique, counts = np.unique(img[:127, :127, 2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperLeftHistRed(img):
+    """
+    Gets max peak of red in upper left corner
+    """
+    y, x = np.histogram(img[:127,:127,0], bins=20)
+    return x[np.where(y == y.max())]
+
+def upperLeftHistGreen(img):
+    """
+    Gets max peak of green in upper left corner
+    """
+    y, x = np.histogram(img[:127,:127,1], bins=20)
+    return x[np.where(y == y.max())]
+
+def upperLeftHistBlue(img):
+    """
+    Gets max peak of blue in upper left corner
+    """
+    y, x = np.histogram(img[:127,:127,2], bins=20)
+    return x[np.where(y == y.max())]
+
+def upperRightAvgRed(img):
+    """
+    Gets the avg of red in the Right upper image
+    """
+    return img[128:, :127, 0].mean()
+
+def upperRightAvgGreen(img):
+    """
+    Gets the avg of green in the Right upper image
+    """
+    return img[128:, :127, 1].mean()
+
+def upperRightAvgBlue(img):
+    """
+    Gets the avg of blue in the Right upper image
+    """
+    return img[128:, :127, 2].mean()
+
+def upperRightHFRed(img):
+    """
+    Gets the Highest frequency of red in upper Right
+    """
+    unique, counts = np.unique(img[128:, :127, 0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperRightHFGreen(img):
+    """
+    Gets the Highest frequency of green in the Right upper image
+    """
+    unique, counts = np.unique(img[128:, :127, 1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperRightHFBlue(img):
+    """
+    Gets the Highest frequency of blue in the Right upper image
+    """
+    unique, counts = np.unique(img[128:, :127, 2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def upperRightHistRed(img):
+    """
+    Gets max peak of red in upper Right corner
+    """
+    y, x = np.histogram(img[128:,:127,0], bins=20)
+    return x[np.where(y == y.max())]
+
+def upperRightHistGreen(img):
+    """
+    Gets max peak of green in upper Right corner
+    """
+    y, x = np.histogram(img[128:,:127,1], bins=20)
+    return x[np.where(y == y.max())]
+
+def upperRightHistBlue(img):
+    """
+    Gets max peak of blue in upper Right corner
+    """
+    y, x = np.histogram(img[128:,:127,2], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerLeftAvgRed(img):
+    """
+    Gets the avg of red in the left lower image
+    """
+    return img[:127, 128:, 0].mean()
+
+def lowerLeftAvgGreen(img):
+    """
+    Gets the avg of green in the left lower image
+    """
+    return img[:127, 128:, 1].mean()
+
+def lowerLeftAvgBlue(img):
+    """
+    Gets the avg of blue in the left lower image
+    """
+    return img[:127, 128:, 2].mean()
+
+def lowerLeftHFRed(img):
+    """
+    Gets the Highest frequency of red in lower left
+    """
+    unique, counts = np.unique(img[:127, 128:, 0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerLeftHFGreen(img):
+    """
+    Gets the Highest frequency of green in the left lower image
+    """
+    unique, counts = np.unique(img[:127, 128:, 1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerLeftHFBlue(img):
+    """
+    Gets the Highest frequency of blue in the left lower image
+    """
+    unique, counts = np.unique(img[:127, 128:, 2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerLeftHistRed(img):
+    """
+    Gets max peak of red in lower left corner
+    """
+    y, x = np.histogram(img[:127,128:,0], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerLeftHistGreen(img):
+    """
+    Gets max peak of green in lower left corner
+    """
+    y, x = np.histogram(img[:127,128:,1], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerLeftHistBlue(img):
+    """
+    Gets max peak of blue in lower left corner
+    """
+    y, x = np.histogram(img[:127,128:,2], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerRightAvgRed(img):
+    """
+    Gets the avg of red in the Right lower image
+    """
+    return img[128:, 128:, 0].mean()
+
+def lowerRightAvgGreen(img):
+    """
+    Gets the avg of green in the Right lower image
+    """
+    return img[128:, 128:, 1].mean()
+
+def lowerRightAvgBlue(img):
+    """
+    Gets the avg of blue in the Right lower image
+    """
+    return img[128:, 128:, 2].mean()
+
+def lowerRightHFRed(img):
+    """
+    Gets the Highest frequency of red in lower Right
+    """
+    unique, counts = np.unique(img[128:, 128:, 0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerRightHFGreen(img):
+    """
+    Gets the Highest frequency of green in the Right lower image
+    """
+    unique, counts = np.unique(img[128:, 128:, 1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerRightHFBlue(img):
+    """
+    Gets the Highest frequency of blue in the Right lower image
+    """
+    unique, counts = np.unique(img[128:, 128:, 2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def lowerRightHistRed(img):
+    """
+    Gets max peak of red in lower Right corner
+    """
+    y, x = np.histogram(img[128:,128:,0], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerRightHistGreen(img):
+    """
+    Gets max peak of green in lower Right corner
+    """
+    y, x = np.histogram(img[128:,128:,1], bins=20)
+    return x[np.where(y == y.max())]
+
+def lowerRightHistBlue(img):
+    """
+    Gets max peak of blue in lower Right corner
+    """
+    y, x = np.histogram(img[128:,128:,2], bins=20)
+    return x[np.where(y == y.max())]
 
 
 
@@ -130,7 +387,7 @@ class ImageCollection:
         Creates scatter plots for different component combinations
         """
 
-        func_list1=[maxPeakBlue]
+        func_list1=[lowerLeftHFRed]
         func_list2=[avgRed]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]
