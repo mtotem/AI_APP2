@@ -150,7 +150,7 @@ def view_classes(data, extent, border_coeffs=None):
     ax1.set_xlim([extent.xmin, extent.xmax])
     ax1.set_ylim([extent.ymin, extent.ymax])
 
-    ax1.axes.set_aspect('equal')
+    #ax1.axes.set_aspect('equal')
 
 
 def view_classification_results(train_data, test1, c1, c2, glob_title, title1, title2, extent, test2=None, c3=None, title3=None):
