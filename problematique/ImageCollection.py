@@ -57,17 +57,24 @@ def frequencyPeakRedRGB(img):
     max_index = np.argmax(counts)
     return unique[max_index]
 
-def frequencyPeakGreenRGB(img):
+def frequencyPeakBlueRGB(img):
+    """
+    Get the most frequent value in the blue channel
+    """
+    unique, counts = np.unique(img[:,:,2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
 def maxPeakRed(img):
     """
-    Gets max peak of blue
+    Gets max peak of red
     """
     y, x = np.histogram(img[:,:,0], bins=256)
     return x[np.where(y == y.max())]
 
 def maxPeakGreen(img):
     """
-    Gets max peak of blue
+    Gets max peak of green
     """
     y, x = np.histogram(img[:,:,1], bins=256)
     return x[np.where(y == y.max())]
@@ -79,26 +86,61 @@ def maxPeakBlue(img):
     y, x = np.histogram(img[:,:,2], bins=50, range=(0, 255), density=True)
     return x[np.where(y == y.max())]
 
-def highestChannel(img):
+def meanYcbcr(img):
     """
-    Get the most frequent value in the blue channel
+    Returns the average of all values in the Ycbcr color space
     """
+
+    return skic.rgb2ycbcr(img).mean()
+
+def stdYcbcr(img):
+    """
+    Returns standard deviation in Ycbcr color space
+    """
+    return skic.rgb2ycbcr(img).std()
+
+def avgY(img):
+    """
+    Gets average Y value in Ycbcr color space
+    """
+    return skic.rgb2ycbcr(img)[:,:,0].mean()
+def avgcb(img):
+    """
+    Gets average cb value in Ycbcr color space
+    """
+    return skic.rgb2ycbcr(img)[:,:,1].mean()
+
+def avgcr(img):
+    """
+    Gets average cr value in Ycbcr color space
+    """
+    return skic.rgb2ycbcr(img)[:,:,2].mean()
+def frequencyPeakY(img):
+    """
+    Get the most frequent value in the Y channel in Ycbcr color space
+    """
+    img=skic.rgb2ycbcr(img)
+    unique, counts = np.unique(img[:,:,0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def frequencyPeakcb(img):
+    """
+    Get the most frequent value in the cb channel in Ycbcr color space
+    """
+    img=skic.rgb2ycbcr(img)
     unique, counts = np.unique(img[:,:,1].flatten(), return_counts=True)
     max_index = np.argmax(counts)
     return unique[max_index]
 
-def frequencyPeakBlueRGB(img):
+def frequencyPeakcr(img):
     """
-    Get the most frequent value in the blue channel
+    Get the most frequent value in the cr channel in Ycbcr color space
     """
+    img=skic.rgb2ycbcr(img)
     unique, counts = np.unique(img[:,:,2].flatten(), return_counts=True)
     max_index = np.argmax(counts)
     return unique[max_index]
-
-
-
-
-
 
 class ImageCollection:
     """
@@ -130,7 +172,7 @@ class ImageCollection:
         Creates scatter plots for different component combinations
         """
 
-        func_list1=[maxPeakBlue]
+        func_list1=[frequencyPeakcr]
         func_list2=[avgRed]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]
@@ -141,8 +183,6 @@ class ImageCollection:
 
             # fig = plt.figure()
             # ax = fig.subplots(1,1)
-
-
 
             coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
             coast_component=np.zeros((coast_img.shape[0],2))
