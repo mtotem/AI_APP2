@@ -387,8 +387,8 @@ class ImageCollection:
         Creates scatter plots for different component combinations
         """
 
-        func_list1=[lowerLeftHFRed]
-        func_list2=[avgRed]
+        func_list1=[upperRightAvgBlue]
+        func_list2=[upperRightAvgGreen]
         # func_list1=[mean, avgRed, avgBlue]
         # func_list2=[std, avgBlue, avgGreen]
 
