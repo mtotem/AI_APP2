@@ -88,9 +88,16 @@ def viewEllipse(data, ax, scale=1, facecolor='none', edgecolor='red', **kwargs):
     """
     moy, cov, lambdas, vectors = calcModeleGaussien(data)
     angle = np.arctan(vectors[1][0] / vectors[1][1]) * 180 / np.pi
-    ellipse = Ellipse(moy, width=2*np.sqrt(5.991*lambdas[0]), height=2*np.sqrt(5.991*lambdas[1]),
+    # angle = -np.arctan2(vectors[0][1] / vectors[0][0]) * 180 / np.pi
+    ellipse = Ellipse(moy, width=2*np.sqrt(lambdas[0]), height=2*np.sqrt(lambdas[1]),
                       angle=angle, facecolor=facecolor,
                       edgecolor=edgecolor, linewidth=2, **kwargs)
+
+    # ax.add_patch(ellipse)
+    ellipse = Ellipse(moy, width=2*np.sqrt(2.771*lambdas[0]), height=2*np.sqrt(2.771*lambdas[1]),
+                      angle=angle, facecolor=facecolor,
+                      edgecolor=edgecolor, linewidth=2, **kwargs)
+
     return ax.add_patch(ellipse)
 
 
@@ -114,8 +121,8 @@ def view_classes(data, extent, border_coeffs=None, title=None):
         ax1.set_title(title)
     #  TODO: rendre général, seulement 3 classes pour l'instant
     # colorpoints = ['orange', 'purple', 'black']
-    colorpoints = ['red', 'green', 'blue']
-    colorfeatures = ['tomato', 'lime', 'cornflowerblue']
+    colorpoints = ['orange', 'green', 'blue']
+    colorfeatures = ['red', 'lime', 'cornflowerblue']
 
     handles=[]
     for i in range(dims[0]):
@@ -259,11 +266,14 @@ def creer_hist2D(data, title, nbin=15, plot=False):
 
     # TODO L2.E1.1 Faire du pseudocode et implémenter une segmentation en bins...
     # pas des bins de l'histogramme
-    deltax = 1
-    deltay = 1
+    deltax = (x.max()-x.min())/nbin
+    deltay = (y.max()-y.min())/nbin
+    id=np.array(range(nbin))
+    binx=id*deltax+x.min()
+    biny=id*deltay+y.min()
 
     # TODO : remplacer les valeurs bidons par la bonne logique ici
-    hist, xedges, yedges = np.histogram2d([1, 1], [1, 1], bins=[1, 1])
+    hist, xedges, yedges = np.histogram2d(x, y, bins=[binx, biny])
     # normalise par la somme (somme de densité de prob = 1)
     histsum = np.sum(hist)
     hist = hist / histsum

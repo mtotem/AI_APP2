@@ -117,6 +117,8 @@ class ImageCollection:
             title=f"{func2.__name__} en fonction de {func1.__name__}"
 
             an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max),title=title)
+            if i==2:
+                break
 
     def covariance():
         functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,
@@ -147,7 +149,7 @@ class ImageCollection:
 
             for id, img in enumerate(street_img):
                 coast_component[id] = func(img)
-            values = values.vstack(values, [street_component, forest_component, coast_component])
+            values = np.vstack([street_component, forest_component, coast_component])
 
         mat_cov_coast = np.cov(values[2])
         mat_cov_forest = np.cov(values[1])

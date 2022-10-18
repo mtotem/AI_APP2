@@ -26,8 +26,8 @@ def main():
     # Données d'origine et données décorrélées
     allClasses = [TroisClasses.C1, TroisClasses.C2, TroisClasses.C3]
     # TODO L2.E1.3
-    coeffs = []
-    an.view_classes(allClasses, TroisClasses.extent)
+    coeffs = classifiers.get_borders(allClasses)
+    an.view_classes(allClasses, TroisClasses.extent,border_coeffs=coeffs)
 
     # TODO: move to static class?
     allDecorr = an.decorrelate(allClasses, vectprop1)
@@ -35,11 +35,12 @@ def main():
     m2d, cov2d, valpr2d, vectprop2d = an.calcModeleGaussien(allDecorr[1], '\nClasse 2d')
     m3d, cov3d, valpr3d, vectprop3d = an.calcModeleGaussien(allDecorr[2], '\nClasse 3d')
     # TODO L2.E1.3
-    coeffsd = []
-    an.view_classes(allDecorr, an.Extent(ptList=an.decorrelate(TroisClasses.extent.get_corners(), vectprop1)))
+    coeffs = classifiers.get_borders(allDecorr)
+
+    an.view_classes(allDecorr, an.Extent(ptList=an.decorrelate(TroisClasses.extent.get_corners(), vectprop1)),border_coeffs=coeffs)
 
     # exemple d'une densité de probabilité arbitraire pour 1 classe
-    an.creer_hist2D(TroisClasses.C1, 'C1')
+    an.creer_hist2D(TroisClasses.C1, 'C1',plot=True)
 
     # génération de données aléatoires
     ndonnees = 5000
@@ -52,7 +53,7 @@ def main():
         #                           (train_data, train_classes, donnee_test, title, extent, test_data, test_classes)
         classifiers.full_Bayes_risk(allClasses, TroisClasses.class_labels, donneesTest, 'Bayes risque #1', TroisClasses.extent, TroisClasses.data, TroisClasses.class_labels)
 
-    if False: # TODO L2.E3
+    if True: # TODO L2.E3
         # 1-PPV avec comme représentants de classes l'ensemble des points déjà classés
         #           full_ppv(n_neighbors, train_data, train_classes, datatest1, title, extent, datatest2=None, classestest2=None)
         classifiers.full_ppv(1, TroisClasses.data, TroisClasses.class_labels, donneesTest, '1-PPV avec données orig comme représentants', TroisClasses.extent)
