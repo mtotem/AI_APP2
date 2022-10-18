@@ -63,8 +63,8 @@ class ImageCollection:
         func_list1=funclist[0:int(len(funclist)/2)]
         func_list2=funclist[int(len(funclist)/2):len(funclist)-1]
 
-        # func_list1=[mean, avgRed, avgBlue]
-        # func_list2=[std, avgBlue, avgGreen]
+        func_list1=[mean]
+        func_list2=[nbedges]
 
         for i in range(len(func_list1)):
             print(i)

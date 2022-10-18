@@ -1,5 +1,6 @@
 from skimage import color as skic
 import numpy as np
+import skimage
 
 def mean(img):
     """
@@ -386,3 +387,21 @@ def lowerRightHistBlue(img):
     """
     y, x = np.histogram(img[128:,128:,2], bins=20)
     return x[np.where(y == y.max())][0]
+
+def entropy(img):
+    """
+    Shannon entropy of img
+    https://stackoverflow.com/questions/50313114/what-is-the-entropy-of-an-image-and-how-is-it-calculated
+    """
+    a=skimage.measure.shannon_entropy(img)
+    return skimage.measure.shannon_entropy(img)
+def nbedges(img):
+    """
+    Get edges of image
+    """
+    rgb_weights = [0.2989, 0.5870, 0.1140]
+
+    img = np.dot(img[..., :3], rgb_weights)
+    edges = skimage.feature.canny(img, sigma=3)
+    count = np.count_nonzero(edges)
+    return count
