@@ -124,7 +124,7 @@ def view_classes(data, extent, border_coeffs=None, title=None):
     if dims[0]==3:
         colorpoints = ['orange', 'green', 'blue']
         colorfeatures = ['red', 'lime', 'cornflowerblue']
-    elif dims[0]
+
     handles=[]
     for i in range(dims[0]):
         tempdata = data[i]

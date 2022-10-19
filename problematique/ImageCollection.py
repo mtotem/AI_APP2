@@ -25,10 +25,22 @@ class ImageCollection:
     """
     Classe globale pour regrouper les infos utiles et les méthodes de la collection d'images
     """
-
+    # os.listdir()
     # liste de toutes les images
     image_folder = r"." + os.sep + "baseDeDonneesImages"
+
     _path = glob.glob(image_folder + os.sep + r"*.jpg")
+
+    #Get a list of all labels
+    labellist=[]
+    for path in _path:
+        name=path.split('\\')[-1].split('.jpg')[0]
+        label = ''.join(i for i in name if not i.isdigit())
+        labellist.append(label)
+    #Remove duplicates
+    labellist = list(dict.fromkeys(labellist))
+
+
     _pathCoast = glob.glob(image_folder + os.sep + r"coast_*.jpg")
     _pathForest = glob.glob(image_folder + os.sep + r"forest_*.jpg")
     _pathStreet = glob.glob(image_folder + os.sep + r"street_*.jpg")
