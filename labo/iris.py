@@ -79,16 +79,15 @@ def main():
     data, minmax = an.scaleData(data)
 
     # TODO L3.E3.4
-    training_data = data
-    training_target = target
-    validation_data = []
-    validation_target = []
+    training_data, validation_data, training_target, validation_target = ttsplit(data, target, test_size=0.20)
 
     # Create neural network
     # TODO L3.E3.3  Tune the number and size of hidden layers
     model = Sequential()
-    model.add(Dense(units=50, activation='tanh',
+    model.add(Dense(units=8, activation='tanh',
                     input_shape=(data.shape[-1],)))
+    for i in range(2, 4):
+        model.add(Dense(units=8, activation='tanh'))
     model.add(Dense(units=target.shape[-1], activation='linear'))
     print(model.summary())
 
@@ -100,7 +99,7 @@ def main():
     callback_list = []
     # TODO L3.E3.3  Tune the training hyperparameters
     model.fit(training_data, training_target, batch_size=len(data), verbose=1,
-              epochs=1000, shuffle=True, callbacks=callback_list)
+              epochs=1000, shuffle=True, callbacks=callback_list,validation_data=(validation_data,validation_target))
 
     # Save trained model to disk
     model.save('iris.h5')
@@ -113,6 +112,7 @@ def main():
 
     # Print the number of classification errors from the training data
     error_indexes = classifiers.calc_erreur_classification(np.argmax(targetPred, axis=-1), target_decode)
+    print(error_indexes)
 
     plt.show()
 

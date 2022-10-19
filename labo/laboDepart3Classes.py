@@ -27,22 +27,23 @@ def main():
     allClasses = [TroisClasses.C1, TroisClasses.C2, TroisClasses.C3]
     # TODO L2.E1.3
     coeffs = classifiers.get_borders(allClasses)
-    an.view_classes(allClasses, TroisClasses.extent,border_coeffs=coeffs)
+    if False:
+        an.view_classes(allClasses, TroisClasses.extent,border_coeffs=coeffs)
 
-    # TODO: move to static class?
-    allDecorr = an.decorrelate(allClasses, vectprop1)
-    m1d, cov1d, valpr1d, vectprop1d = an.calcModeleGaussien(allDecorr[0], '\nClasse 1d')
-    m2d, cov2d, valpr2d, vectprop2d = an.calcModeleGaussien(allDecorr[1], '\nClasse 2d')
-    m3d, cov3d, valpr3d, vectprop3d = an.calcModeleGaussien(allDecorr[2], '\nClasse 3d')
-    # TODO L2.E1.3
-    coeffs = classifiers.get_borders(allDecorr)
+        # TODO: move to static class?
+        allDecorr = an.decorrelate(allClasses, vectprop1)
+        m1d, cov1d, valpr1d, vectprop1d = an.calcModeleGaussien(allDecorr[0], '\nClasse 1d')
+        m2d, cov2d, valpr2d, vectprop2d = an.calcModeleGaussien(allDecorr[1], '\nClasse 2d')
+        m3d, cov3d, valpr3d, vectprop3d = an.calcModeleGaussien(allDecorr[2], '\nClasse 3d')
+        # TODO L2.E1.3
+        coeffs = classifiers.get_borders(allDecorr)
 
-    an.view_classes(allDecorr, an.Extent(ptList=an.decorrelate(TroisClasses.extent.get_corners(), vectprop1)),border_coeffs=coeffs)
+        an.view_classes(allDecorr, an.Extent(ptList=an.decorrelate(TroisClasses.extent.get_corners(), vectprop1)),border_coeffs=coeffs)
 
-    # exemple d'une densité de probabilité arbitraire pour 1 classe
-    an.creer_hist2D(TroisClasses.C1, 'C1',plot=True)
+        # exemple d'une densité de probabilité arbitraire pour 1 classe
+        an.creer_hist2D(TroisClasses.C1, 'C1',plot=True)
 
-    # génération de données aléatoires
+        # génération de données aléatoires
     ndonnees = 5000
     donneesTest = an.genDonneesTest(ndonnees, TroisClasses.extent)
     # Changer le flag dans les sections pertinentes pour chaque partie de laboratoire
@@ -53,7 +54,7 @@ def main():
         #                           (train_data, train_classes, donnee_test, title, extent, test_data, test_classes)
         classifiers.full_Bayes_risk(allClasses, TroisClasses.class_labels, donneesTest, 'Bayes risque #1', TroisClasses.extent, TroisClasses.data, TroisClasses.class_labels)
 
-    if True: # TODO L2.E3
+    if False: # TODO L2.E3
         # 1-PPV avec comme représentants de classes l'ensemble des points déjà classés
         #           full_ppv(n_neighbors, train_data, train_classes, datatest1, title, extent, datatest2=None, classestest2=None)
         classifiers.full_ppv(1, TroisClasses.data, TroisClasses.class_labels, donneesTest, '1-PPV avec données orig comme représentants', TroisClasses.extent)
@@ -63,10 +64,10 @@ def main():
         cluster_centers, cluster_labels = classifiers.full_kmean(1, allClasses, TroisClasses.class_labels, 'Représentants des 1-moy', TroisClasses.extent)
         classifiers.full_ppv(1, cluster_centers, cluster_labels, donneesTest, '1-PPV sur le 1-moy', TroisClasses.extent, TroisClasses.data, TroisClasses.class_labels)
 
-    if False: # TODO L3.E2
+    if True: # TODO L3.E2
         # nn puis visualisation des frontières
-        n_hidden_layers = 2
-        n_neurons = 5
+        n_hidden_layers = 3
+        n_neurons = 8
         classifiers.full_nn(n_hidden_layers, n_neurons, TroisClasses.data, TroisClasses.class_labels, donneesTest,
                 f'NN {n_hidden_layers} layer(s) caché(s), {n_neurons} neurones par couche', TroisClasses.extent, TroisClasses.data, TroisClasses.class_labels)
 

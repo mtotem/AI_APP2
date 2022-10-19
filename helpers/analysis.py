@@ -89,12 +89,12 @@ def viewEllipse(data, ax, scale=1, facecolor='none', edgecolor='red', **kwargs):
     moy, cov, lambdas, vectors = calcModeleGaussien(data)
     angle = np.arctan(vectors[1][0] / vectors[1][1]) * 180 / np.pi
     # angle = -np.arctan2(vectors[0][1] / vectors[0][0]) * 180 / np.pi
-    ellipse = Ellipse(moy, width=2*np.sqrt(lambdas[0]), height=2*np.sqrt(lambdas[1]),
+    ellipse = Ellipse(moy, width=2*np.sqrt(np.abs(lambdas[0])), height=2*np.sqrt(np.abs(lambdas[1])),
                       angle=angle, facecolor=facecolor,
                       edgecolor=edgecolor, linewidth=2, **kwargs)
 
     # ax.add_patch(ellipse)
-    ellipse = Ellipse(moy, width=2*np.sqrt(2.771*lambdas[0]), height=2*np.sqrt(2.771*lambdas[1]),
+    ellipse = Ellipse(moy, width=2*np.sqrt(np.abs(2.771*lambdas[0])), height=2*np.sqrt(np.abs(2.771*lambdas[1])),
                       angle=angle, facecolor=facecolor,
                       edgecolor=edgecolor, linewidth=2, **kwargs)
 

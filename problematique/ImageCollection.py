@@ -20,6 +20,7 @@ import helpers.analysis as an
 import helpers.classifiers as classifiers
 from functions import *
 import functions
+import matplotlib.colors as mcolors
 
 class ImageCollection:
     """
@@ -40,12 +41,16 @@ class ImageCollection:
     #Remove duplicates
     labellist = list(dict.fromkeys(labellist))
 
+    pathlist=dict()
+
+    for label in labellist:
+        pathlist[label]=(glob.glob(image_folder + os.sep + label + r"*.jpg"))
 
     _pathCoast = glob.glob(image_folder + os.sep + r"coast_*.jpg")
     _pathForest = glob.glob(image_folder + os.sep + r"forest_*.jpg")
     _pathStreet = glob.glob(image_folder + os.sep + r"street_*.jpg")
     image_list = os.listdir(image_folder)
-    # Filtrer pour juste garder les images
+    # Filtrer pour garder juste les images
     image_list = [i for i in image_list if '.jpg' in i]
 
     all_images_loaded = False
@@ -58,11 +63,13 @@ class ImageCollection:
     # images = np.array([np.array(skiio.imread(image)) for image in _path])
     # all_images_loaded = True
 
+    fig1, ax1 = (None,None)
+    handles = []
+
     def view_scatter():
         """
         Creates scatter plots for different component combinations
         """
-        print(dir(functions))
         funclist=[avgBlue, avgGreen, avgRed, avgY, avgcb, avgcr, frequencyPeakBlueRGB, frequencyPeakGreenRGB,
                   frequencyPeakRedRGB, frequencyPeakY, frequencyPeakcb, frequencyPeakcr, lowerLeftAvgBlue, lowerLeftAvgGreen,
                   lowerLeftAvgRed, lowerLeftHFBlue, lowerLeftHFGreen, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen,
@@ -79,58 +86,120 @@ class ImageCollection:
         func_list2=[nbedges]
 
         for i in range(len(func_list1)):
-            print(i)
             func1=func_list1[i]
             func2=func_list2[i]
+            #
+            # # fig = plt.figure()
+            # # ax = fig.subplots(1,1)
+            #
+            # coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
+            # coast_component=np.zeros((coast_img.shape[0],2))
+            # for id, img in enumerate(coast_img):
+            #     coast_component[id][0] = func1(img)
+            #     a=func2(img)
+            #     coast_component[id][1] = func2(img)
+            #
+            # forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
+            # forest_component = np.zeros((forest_img.shape[0], 2))
+            # for id, img in enumerate(forest_img):
+            #     forest_component[id][0] = func1(img)
+            #     forest_component[id][1] = func2(img)
+            #
+            # street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
+            # street_component = np.zeros((street_img.shape[0], 2))
+            # for id, img in enumerate(street_img):
+            #     street_component[id][0] = func1(img)
+            #     street_component[id][1] = func2(img)
+            #
+            #
+            #
+            # # scat2=ax.scatter(forest_component1,forest_component2, c='blue', s=10)
+            # # scat3=ax.scatter(street_component1,street_component2, c='green', s=10)
+            # # scat1=ax.scatter(coast_component[0],coast_component[1], c='red', s=10)
+            # # ax.legend((scat1,scat2,scat3),
+            # #           ('Coast', 'Forest', 'Street'),
+            # #           scatterpoints=1,
+            # #           loc="lower left",
+            # #           title="Classes",
+            # #           ncol=1,
+            # #           fontsize=8)
+            # # allClasses=[np.concatenate((coast_component1, coast_component2), axis=0),
+            # #             np.concatenate((forest_component1, forest_component2), axis=0),
+            # #             np.concatenate((street_component1, street_component2), axis=0)]
+            #
+            # allClasses=[coast_component,forest_component,street_component]
+            # x_min=np.min([np.min(coast_component[:,0]),np.min(forest_component[:,0]),np.min(street_component[:,0])])*.09
+            # x_max=np.max([np.max(coast_component[:,0]),np.max(forest_component[:,0]),np.max(street_component[:,0])])*1.1
+            # y_min=np.min([np.min(coast_component[:,1]),np.min(forest_component[:,1]),np.min(street_component[:,1])])*.09
+            # y_max=np.max([np.max(coast_component[:,1]),np.max(forest_component[:,1]),np.max(street_component[:,1])])*1.1
+            #
+            # title=f"{func2.__name__} en fonction de {func1.__name__}"
+            #
+            # an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max),title=title)
+            # if i==2:
+            #     break
 
-            # fig = plt.figure()
-            # ax = fig.subplots(1,1)
+            ImageCollection.fig1, ImageCollection.ax1 = plt.subplots(1, 1)
+            colors = list(mcolors.CSS4_COLORS)
+            ImageCollection.handles=[]
 
-            coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
-            coast_component=np.zeros((coast_img.shape[0],2))
-            for id, img in enumerate(coast_img):
-                coast_component[id][0] = func1(img)
-                a=func2(img)
-                coast_component[id][1] = func2(img)
+            # allcomponents=np.zeros(len(ImageCollection.pathlist.keys()))
+            allcomponents=[]
+            for keyid, key in enumerate(ImageCollection.pathlist.keys()):
+                imgs=np.array([np.array(skiio.imread(image)) for image in ImageCollection.pathlist[key]])
+                component=np.zeros((imgs.shape[0], 2))
+                for id, img in enumerate(imgs):
+                    component[id][0] = func1(img)
+                    component[id][1] = func2(img)
+                ImageCollection.view_classes(component,colors[keyid])
+                allcomponents.append(component)
+        extent=dict()
+        extent['xmin']=np.min([np.min(elem[:,0]) for elem in allcomponents])
+        extent['ymin']=np.min([np.min(elem[:,1]) for elem in allcomponents])
+        extent['xmax']=np.max([np.max(elem[:,0]) for elem in allcomponents])
+        extent['ymax']=np.max([np.max(elem[:,1]) for elem in allcomponents])
 
-            forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
-            forest_component = np.zeros((forest_img.shape[0], 2))
-            for id, img in enumerate(forest_img):
-                forest_component[id][0] = func1(img)
-                forest_component[id][1] = func2(img)
-
-            street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
-            street_component = np.zeros((street_img.shape[0], 2))
-            for id, img in enumerate(street_img):
-                street_component[id][0] = func1(img)
-                street_component[id][1] = func2(img)
+        colors=colors[0:len(ImageCollection.labellist)]
+        ImageCollection.ax1.set_xlim([0,300])
+        ImageCollection.ax1.set_ylim([0,300])
+        ImageCollection.graphinfo(colors=colors,extent=extent)
 
 
-            # scat2=ax.scatter(forest_component1,forest_component2, c='blue', s=10)
-            # scat3=ax.scatter(street_component1,street_component2, c='green', s=10)
-            # scat1=ax.scatter(coast_component[0],coast_component[1], c='red', s=10)
-            # ax.legend((scat1,scat2,scat3),
-            #           ('Coast', 'Forest', 'Street'),
-            #           scatterpoints=1,
-            #           loc="lower left",
-            #           title="Classes",
-            #           ncol=1,
-            #           fontsize=8)
-            # allClasses=[np.concatenate((coast_component1, coast_component2), axis=0),
-            #             np.concatenate((forest_component1, forest_component2), axis=0),
-            #             np.concatenate((street_component1, street_component2), axis=0)]
+    def view_classes(data,color):
+        """
+        Affichage des classes dans data
+        *** Fonctionne pour des classes 2D
 
-            allClasses=[coast_component,forest_component,street_component]
-            x_min=np.min([np.min(coast_component[:,0]),np.min(forest_component[:,0]),np.min(street_component[:,0])])*.09
-            x_max=np.max([np.max(coast_component[:,0]),np.max(forest_component[:,0]),np.max(street_component[:,0])])*1.1
-            y_min=np.min([np.min(coast_component[:,1]),np.min(forest_component[:,1]),np.min(street_component[:,1])])*.09
-            y_max=np.max([np.max(coast_component[:,1]),np.max(forest_component[:,1]),np.max(street_component[:,1])])*1.1
+        data: tableau des classes à afficher. La première dimension devrait être égale au nombre de classes.
+        extent: bornes du graphique
+        border_coeffs: coefficient des frontières, format des données voir helpers.classifiers.get_borders()
+            coef order: [x**2, xy, y**2, x, y, cst (cote droit log de l'equation de risque), cst (dans les distances de mahalanobis)]
+        """
+        dims = np.asarray(data).shape
 
-            title=f"{func2.__name__} en fonction de {func1.__name__}"
+        colorpoints = color
+        colorfeatures = color
 
-            an.view_classes(allClasses, an.Extent(xmin=x_min,xmax=x_max,ymin=y_min,ymax=y_max),title=title)
-            if i==2:
-                break
+        # Plot les points
+        ImageCollection.handles.append(ImageCollection.ax1.scatter(data[:, 0], data[:, 1], s=5, c=colorpoints))
+        if data.shape[0] > 1:
+            an.viewEllipse(data, ImageCollection.ax1, edgecolor=colorfeatures)
+
+        #Plot les moyennes
+        if data.shape[0]>1:
+            m, cov, valpr, vectprop = an.calcModeleGaussien(data)
+            ImageCollection.ax1.scatter(m[0], m[1], c=colorfeatures, s=60)
+    def graphinfo(colors,extent):
+        ImageCollection.ax1.legend(ImageCollection.handles,
+                   colors,
+                   scatterpoints=1,
+                   loc="lower left",
+                   title="Classes",
+                   ncol=1,
+                   fontsize=8)
+
+        ImageCollection.ax1.set_xlim([extent['xmin'], extent['xmax']])
+        ImageCollection.ax1.set_ylim([extent['ymin'], extent['ymax']])
 
     def covariance():
         functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,

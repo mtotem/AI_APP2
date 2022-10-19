@@ -167,14 +167,11 @@ def nn_classify(n_hidden_layers, n_neurons, train_data, classes, test1, test2=No
     # Convertit la représentation des étiquettes pour utiliser plus facilement la cross-entropy comme loss
     # TODO L3.E2.1
     encoder = OneHotEncoder(sparse=False)
-    targets = classes
+    targets = encoder.fit_transform(classes.reshape(-1,1))
 
     # Crée des ensembles d'entraînement et de validation
     # TODO L3.E2.3
-    training_data = data
-    training_target = targets
-    validation_data = []
-    validation_target = []
+    training_data, validation_data, training_target, validation_target = ttsplit(data,targets,test_size=0.20)
 
     # Create neural network
     # TODO L3.E2.6 Tune the number and size of hidden layers
@@ -189,14 +186,15 @@ def nn_classify(n_hidden_layers, n_neurons, train_data, classes, test1, test2=No
     # TODO L3.E2.6 Tune the training parameters
     # TODO L3.E2.1
     NNmodel.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
+    # NNmodel.compile(optimizer=Adam(), loss='mse', metrics=['mae'])
 
     # Perform training
     # TODO L3.E2.4
-    callback_list = [K.callbacks.EarlyStopping(patience=50, verbose=1, restore_best_weights=1), print_every_N_epochs(25)]
+    callback_list = [K.callbacks.EarlyStopping(patience=50, verbose=0, restore_best_weights=1), print_every_N_epochs(100)]
     # TODO L3.E2.6 Tune the maximum number of iterations and desired error
     # TODO L3.E2.2 L3.E2.3
-    NNmodel.fit(training_data, training_target, batch_size=len(data), verbose=1,
-              epochs=10, shuffle=True, callbacks=[])
+    NNmodel.fit(training_data, training_target, batch_size=len(data), verbose=0,
+              epochs=100, shuffle=True, callbacks=callback_list,validation_data=(validation_data,validation_target))
 
     # Save trained model to disk
     NNmodel.save('3classes.h5')
