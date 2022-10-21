@@ -56,32 +56,11 @@ def frequencyPeakBlueRGB(img):
     max_index = np.argmax(counts)
     return unique[max_index]
 
-def maxPeakRed(img):
-    """
-    Gets max peak of red
-    """
-    y, x = np.histogram(img[:,:,0], bins=20)
-    return x[np.where(y == y.max())][0]
-
-def maxPeakGreen(img):
-    """
-    Gets max peak of green
-    """
-    y, x = np.histogram(img[:,:,1], bins=20)
-    return x[np.where(y == y.max())][0]
-
-def maxPeakBlue(img):
-    """
-    Gets max peak of blue
-    """
-    y, x = np.histogram(img[:,:,2], bins=20)
-    return x[np.where(y == y.max())][0]
 
 def meanYcbcr(img):
     """
     Returns the average of all values in the Ycbcr color space
     """
-
     return skic.rgb2ycbcr(img).mean()
 
 def stdYcbcr(img):
@@ -405,3 +384,42 @@ def nbedges(img):
     edges = skimage.feature.canny(img, sigma=3)
     count = np.count_nonzero(edges)
     return count
+
+def meanlab(img):
+    labimg=skimage.color.rgb2lab(img)
+    return labimg.mean()
+
+def labfreqpeakL(img):
+    labimg = skimage.color.rgb2lab(img)
+    unique, counts = np.unique(labimg[:, :, 0].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+def labfreqpeakA(img):
+    labimg = skimage.color.rgb2lab(img)
+    unique, counts = np.unique(labimg[:, :, 1].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+def labfreqpeakB(img):
+    labimg = skimage.color.rgb2lab(img)
+    unique, counts = np.unique(labimg[:, :, 2].flatten(), return_counts=True)
+    max_index = np.argmax(counts)
+    return unique[max_index]
+
+def labmedianL(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.median(labimg[:, :, 0])
+def labmedianA(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.median(labimg[:, :, 1])
+def labmedianB(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.median(labimg[:, :, 2])
+def labstdL(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.std(labimg[:, :, 0])
+def labstdA(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.std(labimg[:, :, 1])
+def labstdB(img):
+    labimg=skimage.color.rgb2lab(img)
+    return np.std(labimg[:, :, 2])
