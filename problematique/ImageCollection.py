@@ -52,7 +52,7 @@ class ImageCollection:
         pathlist['coast']=[x for x in pathlist['coast'] if 'coast_sun' not in x]
         pathlist['forest']=[x for x in pathlist['forest'] if 'forest_for' not in x]
         pathlist['forest']=[x for x in pathlist['forest'] if 'forest_nat' not in x]
-        pathlist['street']=[x for x in pathlist['street'] if 'stree_urb' not in x]
+        pathlist['street']=[x for x in pathlist['street'] if 'street_urb' not in x]
         pathlist['street']=[x for x in pathlist['street'] if 'street_gre' not in x]
 
     if len(labellist)==3:
@@ -94,7 +94,7 @@ class ImageCollection:
         func_list2=funclist[int(len(funclist)/2):len(funclist)-1]
 
         func_list1=[nbedges]
-        func_list2=[labstdA]
+        func_list2=[corner]
 
         for i in range(len(func_list1)):
             func1=func_list1[i]

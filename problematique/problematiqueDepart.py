@@ -9,6 +9,7 @@ import numpy as np
 import random
 
 from ImageCollection import ImageCollection
+import modelsa
 
 
 #######################################
@@ -18,7 +19,8 @@ def main():
     #N = 5
     #im_list = np.sort(random.sample(range(np.size(ImageCollection.image_list, 0)), N))
     #print(im_list)
-    ImageCollection.view_scatter()
+    # ImageCollection.view_scatter()
+    modelsa.NN()
     #ImageCollection.covariance()
     # ImageCollection.images_display(im_list)
     # ImageCollection.view_histogrammes(im_list)

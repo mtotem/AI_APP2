@@ -383,7 +383,7 @@ def nbedges(img):
     img = np.dot(img[..., :3], rgb_weights)
     edges = skimage.feature.canny(img, sigma=3)
     count = np.count_nonzero(edges)
-    return count
+    return count/100
 
 def meanlab(img):
     labimg=skimage.color.rgb2lab(img)
@@ -423,3 +423,52 @@ def labstdA(img):
 def labstdB(img):
     labimg=skimage.color.rgb2lab(img)
     return np.std(labimg[:, :, 2])
+# def houghline(img):
+#     img=np.dot(img[..., :3], [0.299, 0.587, 0.114])
+#     tested_angles = np.linspace(-np.pi / 2, np.pi / 2, 360, endpoint=False)
+#     h, theta, d = skimage.transform.hough_line(img, theta=tested_angles)
+#     b=skimage.transform.hough_line_peaks(h, theta, d)
+#
+#     return len(b[0])
+def gray_scale(img):
+    gray_img = np.zeros((img.shape[0], img.shape[1]))
+    for i in range(img.shape[0]):
+        for j in range(img.shape[1]):
+            gray_img[i][j] = 0.2125*img[i][j][0] + 0.7154*img[i][j][1] + 0.0721*img[i][j][2]
+    return gray_img
+#def gaus_filter(img, sigma):
+#    filters.gaussian(img, sigma=sigma)
+
+def corr(img, YN, method):
+    if YN:
+        if method == "LOG":
+            img = log_corr(img, 2, False)
+        if method == "SIG":
+            img = sig_corr(img, 0.5, 10, False)
+        if method == "GAMMA":
+            img = gamma_corr(img, 2, 1)
+    return img
+
+def add_sub(add_sub, img, func):
+    if add_sub == '+':
+        return func(img)
+    if add_sub == '-':
+        return -1 * func(img)
+
+def gamma_corr(img, gamma, gain):
+    return skimage.exposure.adjust_gamma(img, gamma=gamma, gain=gain)
+
+def log_corr(img, gain, inv):
+    return skimage.exposure.adjust_log(img, gain=gain, inv=inv)
+
+def sig_corr(img, cutoff, gain, inv):
+    return skimage.exposure.adjust_sigmoid(img, cutoff=cutoff, gain=gain, inv=inv)
+
+def corner(img):
+    rgb_weights = [0.2989, 0.5870, 0.1140]
+    img = np.dot(img[..., :3], rgb_weights)
+    coords=skimage.feature.corner_peaks(skimage.feature.corner_harris(img), min_distance=5, threshold_rel=0.02)
+    try:
+        return len(coords)
+    except:
+        return 0
