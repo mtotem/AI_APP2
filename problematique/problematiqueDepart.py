@@ -9,7 +9,7 @@ import numpy as np
 import random
 
 from ImageCollection import ImageCollection
-import modelsa
+import NN
 import Bayes
 import PPV
 
@@ -23,7 +23,7 @@ def main():
     #print(im_list)
     # ImageCollection.view_scatter()
     # data extract
-    modelsa.NN()
+    NN.NN()
     #Bayes.Bayes()
     #PPV.PPV(1, 20)
     #ImageCollection.covariance()
