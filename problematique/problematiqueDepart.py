@@ -10,6 +10,8 @@ import random
 
 from ImageCollection import ImageCollection
 import modelsa
+import Bayes
+import PPV
 
 
 #######################################
@@ -20,7 +22,10 @@ def main():
     #im_list = np.sort(random.sample(range(np.size(ImageCollection.image_list, 0)), N))
     #print(im_list)
     # ImageCollection.view_scatter()
+    # data extract
     modelsa.NN()
+    #Bayes.Bayes()
+    #PPV.PPV(1, 20)
     #ImageCollection.covariance()
     # ImageCollection.images_display(im_list)
     # ImageCollection.view_histogrammes(im_list)
