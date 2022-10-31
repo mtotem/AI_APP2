@@ -18,7 +18,6 @@ from skimage import io as skiio
 from functions import *
 from keras.optimizers import Adam
 
-
 class NN:
     def __init__(self):
 
@@ -95,7 +94,6 @@ class NN:
         #print(error_indexes)
         #
         plt.show()
-
 
 class print_every_N_epochs(K.callbacks.Callback):
     """

@@ -70,7 +70,7 @@ class Extent:
         Accesseur qui retourne une liste points qui correspondent aux 4 coins d'un range 2D bornés par les min max
         """
         return np.array(list(itertools.product([self.xmin, self.xmax], [self.ymin, self.ymax])))
-########################################################################################################################
+
 class Extent_5d:
     """
     classe pour contenir les min et max de données 5D
@@ -126,7 +126,6 @@ class Extent_5d:
                                                [self.zmin, self.zmax], [self.wmin, self.wmax],
                                                [self.vmin, self.vmax])))
 
-########################################################################################################################
 
 def viewEllipse(data, ax, scale=1, facecolor='none', edgecolor='red', **kwargs):
     """
@@ -417,14 +416,7 @@ def genDonneesTest(ndonnees, extent):
     # génération de n données aléatoires 2D sur une plage couverte par extent
     return np.transpose(np.array([(extent.xmax - extent.xmin) * np.random.random(ndonnees) + extent.xmin,
                                          (extent.ymax - extent.ymin) * np.random.random(ndonnees) + extent.ymin]))
-def genDonneesTest_5d(ndonnees, extent):
-    # génération de n données aléatoires 2D sur une plage couverte par extent
-    return np.transpose(np.array([(extent.xmax - extent.xmin) * np.random.random(ndonnees) + extent.xmin,
-                                  (extent.ymax - extent.ymin) * np.random.random(ndonnees) + extent.ymin,
-                                  (extent.zmax - extent.zmin) * np.random.random(ndonnees) + extent.zmin,
-                                  (extent.wmax - extent.wmin) * np.random.random(ndonnees) + extent.wmin,
-                                  (extent.vmax - extent.vmin) * np.random.random(ndonnees) + extent.vmin,
-                                  ]))
+
 
 # usage: OUT = scale_data(IN, MINMAX)
 #

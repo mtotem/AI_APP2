@@ -47,7 +47,7 @@ def main():
     ndonnees = 5000
     donneesTest = an.genDonneesTest(ndonnees, TroisClasses.extent)
     # Changer le flag dans les sections pertinentes pour chaque partie de laboratoire
-    if False: # TODO L2.E2.2
+    if True: # TODO L2.E2.2
 
         # classification
         # Bayes
@@ -64,7 +64,7 @@ def main():
         cluster_centers, cluster_labels = classifiers.full_kmean(1, allClasses, TroisClasses.class_labels, 'Représentants des 1-moy', TroisClasses.extent)
         classifiers.full_ppv(1, cluster_centers, cluster_labels, donneesTest, '1-PPV sur le 1-moy', TroisClasses.extent, TroisClasses.data, TroisClasses.class_labels)
 
-    if True: # TODO L3.E2
+    if False: # TODO L3.E2
         # nn puis visualisation des frontières
         n_hidden_layers = 3
         n_neurons = 8
