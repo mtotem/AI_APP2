@@ -135,7 +135,6 @@ def full_ppv(n_neighbors, train_data, train_classes, datatest1, title, extent, d
     Produit un graphique des résultats pour test1 et test2 le cas échéant
     """
     predictions, predictions2 = ppv_classify(n_neighbors, train_data, train_classes.ravel(), datatest1, datatest2)
-
     predictions = predictions.reshape(len(datatest1), 1)
 
     error_class = 6  # optionnel, assignation d'une classe différente à toutes les données en erreur, aide pour la visualisation
@@ -164,8 +163,7 @@ def ppv_classify(n_neighbors, train_data, classes, test1, test2=None):
     # metric est le type de distance entre les points. La liste est disponible ici:
     # https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.DistanceMetric.html#sklearn.neighbors.DistanceMetric
     # TODO L2.E3.1 Compléter la logique pour utiliser la librairie ici
-    # kNN = knn(n_neighbors, metric='minkowski')  # minkowski correspond à distance euclidienne lorsque le paramètre p = 2
-    kNN = knn(n_neighbors, metric='euclidean')  # minkowski correspond à distance euclidienne lorsque le paramètre p = 2
+    kNN = knn(n_neighbors, metric='minkowski')  # minkowski correspond à distance euclidienne lorsque le paramètre p = 2
     kNN.fit(train_data, classes)
     predictions_test1 = np.zeros(len(test1))  # classifie les données de test1
     predictions_test2 = np.zeros(len(test2)) if np.asarray(test2).any() else np.asarray([])  # classifie les données de test2 si présentes
