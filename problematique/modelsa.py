@@ -16,6 +16,7 @@ import glob
 import os
 from skimage import io as skiio
 from functions import *
+import tensorflow as tf
 from keras.optimizers import Adam
 
 
@@ -61,32 +62,45 @@ class NN:
 
         # # Create neural network
         model = Sequential()
-        model.add(Dense(units=6, activation='tanh',
+        model.add(Dense(units=5, activation='tanh',
                         input_shape=(data.shape[-1],)))
-        model.add(Dense(units=6, activation='tanh'))
         model.add(Dense(units=4, activation='tanh'))
+        model.add(Dense(units=3, activation='tanh'))
         model.add(Dense(units=target.shape[-1], activation='sigmoid'))
         print(model.summary())
         #
         # # Define training parameters
         # model.compile(optimizer=Adam(), loss='binary_crossentropy', metrics=['accuracy'])
-        model.compile(optimizer=SGD(learning_rate=0.02), loss='binary_crossentropy',metrics=['accuracy'])
+        model.compile(optimizer=Adam(learning_rate=0.005), loss='binary_crossentropy',metrics=['accuracy'])
         #
         # # Perform training
-        callback_list = []
-        model.fit(training_data, training_target, batch_size=20, verbose=0,
-                  epochs=500, shuffle=True, callbacks=callback_list,
+        callback_list = [tf.keras.callbacks.ModelCheckpoint(
+            filepath='iris.h5',
+            verbose=1,
+            save_best_only=True),
+
+            tf.keras.callbacks.EarlyStopping(
+            monitor='val_loss',
+            min_delta=0.01,
+            patience=50,
+            verbose=1,
+            mode='auto',
+            baseline=None,
+            restore_best_weights=False)
+            ]
+        model.fit(training_data, training_target, batch_size=20, verbose=1,
+                  epochs=500, shuffle=True, callbacks=callback_list[0],
                   validation_data=(validation_data, validation_target))
         print(f'Done training : {time.time() - start} seconds')
         #
-        # # Save trained model to disk
-        # model.save('iris.h5')
-        #
+
         an.plot_metrics(model)
-        #
+        history = model.history.history
+        print('Model Best accuracy: ' + str(max(history['accuracy'])*100) + '%')
         # # Test model (loading from disk)
-        # model = load_model('iris.h5')
+        model = load_model('iris.h5')
         targetPred = model.predict(data)
+
 
         # # Print the number of classification errors from the training data
         # error_indexes = classifiers.calc_erreur_classification(targetPred, target_decode)
