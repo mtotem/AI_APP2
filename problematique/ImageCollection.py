@@ -170,7 +170,7 @@ class ImageCollection:
     def covariance():
         functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,
                      frequencyPeakRedRGB, frequencyPeakGreenRGB, frequencyPeakY, frequencyPeakcb,
-                     frequencyPeakcr, upperRightAvgBlue,
+                     frequencyPeakcr, maxPeakRed, maxPeakBlue, maxPeakGreen, upperRightAvgBlue,
                      upperRightAvgGreen, upperRightAvgRed, upperRightHFBlue, upperRightHFGreen, upperRightHFRed,
                      upperRightHistGreen, upperRightHistGreen, upperRightHistBlue, upperLeftAvgRed, upperLeftAvgGreen,
                      upperLeftAvgBlue, upperLeftHFGreen, upperLeftHFBlue, upperLeftHFRed, upperLeftHistBlue,
@@ -178,39 +178,56 @@ class ImageCollection:
                      lowerRightHFGreen, lowerRightHFRed, lowerRightHFBlue, lowerRightHistBlue, lowerRightHistGreen,
                      lowerRightHistRed, lowerLeftAvgGreen, lowerLeftAvgBlue, lowerLeftAvgRed, lowerLeftHFGreen,
                      lowerLeftHFBlue, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen, lowerLeftHistRed]
-
-        _pathCoast = glob.glob(ImageCollection.image_folder + os.sep + r"coast_*.jpg")
-        _pathForest = glob.glob(ImageCollection.image_folder + os.sep + r"forest_*.jpg")
-        _pathStreet = glob.glob(ImageCollection.image_folder + os.sep + r"street_*.jpg")
-        coast_img = np.array([np.array(skiio.imread(image)) for image in _pathCoast])
-        forest_img = np.array([np.array(skiio.imread(image)) for image in _pathForest])
-        street_img = np.array([np.array(skiio.imread(image)) for image in _pathStreet])
-
-        street_component = np.zeros((street_img.shape[0], 2))
-        forest_component = np.zeros((forest_img.shape[0], 2))
-        coast_component = np.zeros((coast_img.shape[0], 2))
-        values = np.array([])
+        functions_text = ["mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,"
+                     "frequencyPeakRedRGB, frequencyPeakGreenRGB, frequencyPeakY, frequencyPeakcb,"
+                     "frequencyPeakcr, maxPeakRed, maxPeakBlue, maxPeakGreen, upperRightAvgBlue,"
+                     "upperRightAvgGreen, upperRightAvgRed, upperRightHFBlue, upperRightHFGreen, upperRightHFRed,"
+                     "upperRightHistGreen, upperRightHistGreen, upperRightHistBlue, upperLeftAvgRed, upperLeftAvgGreen,"
+                     "upperLeftAvgBlue, upperLeftHFGreen, upperLeftHFBlue, upperLeftHFRed, upperLeftHistBlue,"
+                     "upperLeftHistGreen, upperLeftHistRed, lowerRightAvgBlue, lowerRightAvgGreen, lowerRightAvgRed,"
+                     "lowerRightHFGreen, lowerRightHFRed, lowerRightHFBlue, lowerRightHistBlue, lowerRightHistGreen,"
+                     "lowerRightHistRed, lowerLeftAvgGreen, lowerLeftAvgBlue, lowerLeftAvgRed, lowerLeftHFGreen,"
+                     "lowerLeftHFBlue, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen, lowerLeftHistRed"]
+        coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
+        forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
+        street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
+        street_component = np.zeros((street_img.shape[0]))
+        forest_component = np.zeros((forest_img.shape[0]))
+        coast_component = np.zeros((coast_img.shape[0]))
+        values_s = np.empty(street_img.shape[0])
+        values_f = np.empty(forest_img.shape[0])
+        values_c = np.empty(coast_img.shape[0])
         for func in functions:
             for id, img in enumerate(street_img):
                 street_component[id] = func(img)
-
             for id, img in enumerate(street_img):
                 forest_component[id] = func(img)
-
             for id, img in enumerate(street_img):
                 coast_component[id] = func(img)
-            values = np.vstack([street_component, forest_component, coast_component])
-
-        mat_cov_coast = np.cov(values[2])
-        mat_cov_forest = np.cov(values[1])
-        mat_cov_street = np.cov(values[0])
-
+            values_s = np.vstack([values_s, street_component])
+            values_f = np.vstack([values_f, forest_component])
+            values_c = np.vstack([values_c, coast_component])
+        mat_cov_coast = np.cov(values_c)
+        mat_cov_forest = np.cov(values_f)
+        mat_cov_street = np.cov(values_s)
+        mat_p_coast = np.zeros_like(mat_cov_coast)
+        mat_p_forest = np.zeros_like(mat_cov_forest)
+        mat_p_street = np.zeros_like(mat_cov_street)
+        for i in range(mat_cov_street.shape[0]):
+            for j in range(mat_cov_street.shape[1]):
+                mat_p_coast[i][j] = 1 - (mat_cov_coast[i][j] / (np.sqrt(mat_cov_coast[i][i]) * (np.sqrt(mat_cov_coast[j][j]))))
+                mat_p_forest[i][j] = 1 - (mat_cov_forest[i][j] / (np.sqrt(mat_cov_forest[i][i]) * (np.sqrt(mat_cov_forest[j][j]))))
+                mat_p_street[i][j] = 1 - (mat_cov_street[i][j] / (np.sqrt(mat_cov_street[i][i]) * (np.sqrt(mat_cov_street[j][j]))))
+        print(functions_text)
         ax1 = plt.subplot(3, 1, 1)
-        ax1.matshow(mat_cov_coast)
+        ax1.matshow(mat_p_coast)
+        ax1.title.set_text('1-p coast correlation')
         ax2 = plt.subplot(3, 1, 2)
-        ax2.matshow(mat_cov_forest)
+        ax2.matshow(mat_p_forest)
+        ax2.title.set_text('1-p forest correlation')
         ax3 = plt.subplot(3, 1, 3)
-        ax3.matshow(mat_cov_street)
+        ax3.matshow(mat_p_street)
+        ax3.title.set_text('1-p street correlation')
 
     def images_display(indexes):
         """
