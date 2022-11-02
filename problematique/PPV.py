@@ -9,7 +9,7 @@ from sklearn.neighbors import KNeighborsClassifier as knn
 from sklearn.cluster import KMeans as km
 
 class PPV:
-    def __init__(self, n_nei):
+    def __init__(self, n_nei, n_km):
         start = time.time()
         print('Starting PPV')
 
@@ -30,7 +30,9 @@ class PPV:
         target = target
         pathlist = pathlist
 
-        funclist = [avgBlue, avgRed, corner, nbedges, entropy]
+        funclist = [avgBlue, avgRed, corner, nbedges]#, entropy, avgBlue, avgRed,
+        # funclist=[avgBlue,avgRed, corner, nbedges, entropy] => 76 %
+        # funclist = [avgBlue, avgRed, corner, nbedges] => 87.9 %
 
         forest_t = []
         coast_t = []
@@ -73,12 +75,12 @@ class PPV:
         class_labels[range(len(forest), 2 * len(forest))] = 1
         class_labels[range(2 * len(forest), ndata)] = 2
         # Min et max des données
-        extent = an.Extent_5d(ptList=data)
+        extent = an.Extent_4d(ptList=data)
 
         ndonnees = 5000
-        donneesTest = an.genDonneesTest_5d(ndonnees, extent)
+        donneesTest = an.genDonneesTest_4d(ndonnees, extent)# _5d or _4d
 
-        cluster_centers, cluster_labels = full_kmean(n_nei, AllClass, class_labels, f'Représentants des {n_nei}-moy', extent)
+        cluster_centers, cluster_labels = full_kmean(n_km, AllClass, class_labels, f'Représentants des {n_nei}-moy', extent)
         full_ppv(n_nei, cluster_centers, cluster_labels, donneesTest, 'ppv test', extent, data, class_labels)
         print("hop")
 
@@ -146,10 +148,10 @@ def full_ppv(n_neighbors, train_data, train_classes, datatest1, title, extent, d
         predictions2[error_indexes] = error_class
         print(f'Taux de classification moyen sur l\'ensemble des classes, {title}: {100 * (1 - len(error_indexes) / len(classestest2))}%')
 
-    #an.view_classification_results(train_data, datatest1, train_classes, predictions, title, 'Représentants de classe',
-                                   #f'Données aléatoires classées {n_neighbors}-PPV',
-                                   #extent, datatest2, predictions2 / error_class / 0.75,
-                                   #f'Prédiction de {n_neighbors}-PPV, données originales')
+    an.view_classification_results(train_data, datatest1, train_classes, predictions, title, 'Représentants de classe',
+                                   f'Données aléatoires classées {n_neighbors}-PPV',
+                                   extent, datatest2, predictions2 / error_class / 0.75,
+                                   f'Prédiction de {n_neighbors}-PPV, données originales')
 
 def ppv_classify(n_neighbors, train_data, classes, test1, test2=None):
     """
@@ -165,8 +167,8 @@ def ppv_classify(n_neighbors, train_data, classes, test1, test2=None):
     # TODO L2.E3.1 Compléter la logique pour utiliser la librairie ici
     kNN = knn(n_neighbors, metric='minkowski')  # minkowski correspond à distance euclidienne lorsque le paramètre p = 2
     kNN.fit(train_data, classes)
-    predictions_test1 = np.zeros(len(test1))  # classifie les données de test1
-    predictions_test2 = np.zeros(len(test2)) if np.asarray(test2).any() else np.asarray([])  # classifie les données de test2 si présentes
+    predictions_test1 = kNN.predict(test1)  # classifie les données de test1
+    predictions_test2 = kNN.predict(test2) if np.asarray(test2).any() else np.asarray([])  # classifie les données de test2 si présentes
     return predictions_test1, predictions_test2
 
 def calc_erreur_classification(original_data, classified_data):

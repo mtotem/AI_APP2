@@ -127,6 +127,59 @@ class Extent_5d:
                                                [self.vmin, self.vmax])))
 
 ########################################################################################################################
+########################################################################################################################
+class Extent_4d:
+    """
+    classe pour contenir les min et max de données 5D
+    membres: xmin, xmax, ymin, ymax
+    Constructeur peut utiliser les 4 valeurs précédentes ou
+        calculer directement les min et max d'une liste de points
+    Accesseurs:
+        get_array: retourne les min max formattés en array
+        get_corners: retourne les coordonnées des points aux coins d'un range couvert par les min max
+    """
+    def __init__(self, xmin=0, xmax=10, ymin=0, ymax=10, zmin=0, zmax=10, wmin=0, wmax=10, ptList=None):
+        """
+        Constructeur
+        2 options:
+            passer 4 arguments min et max
+            passer 1 array qui contient les des points sur lesquels sont calculées les min et max
+        """
+        if ptList is not None:
+            self.xmin = np.floor(np.min(ptList[:,0]))-1
+            self.xmax = np.ceil(np.max(ptList[:,0]))+1
+            self.ymin = np.floor(np.min(ptList[:,1]))-1
+            self.ymax = np.ceil(np.max(ptList[:,1]))+1
+            self.zmin = np.floor(np.min(ptList[:, 2])) - 1
+            self.zmax = np.ceil(np.max(ptList[:, 2])) + 1
+            self.wmin = np.floor(np.min(ptList[:, 3])) - 1
+            self.wmax = np.ceil(np.max(ptList[:, 3])) + 1
+
+        else:
+            self.xmin = xmin
+            self.xmax = xmax
+            self.ymin = ymin
+            self.ymax = ymax
+            self.zmin = zmin
+            self.zmax = zmax
+            self.wmin = wmin
+            self.wmax = wmax
+
+    def get_array(self):
+        """
+        Accesseur qui retourne sous format matriciel
+        """
+        return [[self.xmin, self.xmax], [self.ymin, self.ymax], [self.zmin, self.zmax],
+                [self.wmin, self.wmax]]
+
+    def get_corners(self):
+        """
+        Accesseur qui retourne une liste points qui correspondent aux 4 coins d'un range 2D bornés par les min max
+        """
+        return np.array(list(itertools.product([self.xmin, self.xmax], [self.ymin, self.ymax],
+                                               [self.zmin, self.zmax], [self.wmin, self.wmax])))
+
+########################################################################################################################
 
 def viewEllipse(data, ax, scale=1, facecolor='none', edgecolor='red', **kwargs):
     """
@@ -251,7 +304,7 @@ def view_classification_results(train_data, test1, c1, c2, glob_title, title1, t
         ax3.set_title(title3)
         ax3.set_xlim([extent.xmin, extent.xmax])
         ax3.set_ylim([extent.ymin, extent.ymax])
-        ax3.axes.set_aspect('equal')
+        ax3.axes.set_aspect('auto')
     else:
         fig, (ax1, ax2) = plt.subplots(2, 1)
     fig.suptitle(glob_title)
@@ -263,8 +316,8 @@ def view_classification_results(train_data, test1, c1, c2, glob_title, title1, t
     ax1.set_ylim([extent.ymin, extent.ymax])
     ax2.set_xlim([extent.xmin, extent.xmax])
     ax2.set_ylim([extent.ymin, extent.ymax])
-    ax1.axes.set_aspect('equal')
-    ax2.axes.set_aspect('equal')
+    ax1.axes.set_aspect('auto')
+    ax2.axes.set_aspect('auto')
 
 
 def plot_metrics(model):
@@ -424,6 +477,13 @@ def genDonneesTest_5d(ndonnees, extent):
                                   (extent.zmax - extent.zmin) * np.random.random(ndonnees) + extent.zmin,
                                   (extent.wmax - extent.wmin) * np.random.random(ndonnees) + extent.wmin,
                                   (extent.vmax - extent.vmin) * np.random.random(ndonnees) + extent.vmin,
+                                  ]))
+def genDonneesTest_4d(ndonnees, extent):
+    # génération de n données aléatoires 2D sur une plage couverte par extent
+    return np.transpose(np.array([(extent.xmax - extent.xmin) * np.random.random(ndonnees) + extent.xmin,
+                                  (extent.ymax - extent.ymin) * np.random.random(ndonnees) + extent.ymin,
+                                  (extent.zmax - extent.zmin) * np.random.random(ndonnees) + extent.zmin,
+                                  (extent.wmax - extent.wmin) * np.random.random(ndonnees) + extent.wmin,
                                   ]))
 
 # usage: OUT = scale_data(IN, MINMAX)
