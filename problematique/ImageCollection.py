@@ -61,6 +61,10 @@ class ImageCollection:
         colors=['red','pink','green','limegreen','darkgreen','blue','cornflowerblue','navy']
         # colors=list(mcolors.CSS4_COLORS[0:len(labellist)])
 
+    _pathCoast = glob.glob(image_folder + os.sep + r"coast_*.jpg")
+    _pathForest = glob.glob(image_folder + os.sep + r"forest_*.jpg")
+    _pathStreet = glob.glob(image_folder + os.sep + r"street_*.jpg")
+
     image_list = os.listdir(image_folder)
     # Filtrer pour garder juste les images
     image_list = [i for i in image_list if '.jpg' in i]
@@ -152,6 +156,7 @@ class ImageCollection:
         if data.shape[0]>1:
             m, cov, valpr, vectprop = an.calcModeleGaussien(data)
             ImageCollection.ax1.scatter(m[0], m[1], c=colorfeatures, s=60)
+
     def graphinfo(title,axes,labels,extent):
         ImageCollection.ax1.legend(ImageCollection.handles,
                    labels,
@@ -168,9 +173,10 @@ class ImageCollection:
         ImageCollection.ax1.set_ylabel(axes[1])
 
     def covariance():
+
         functions = [mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,
                      frequencyPeakRedRGB, frequencyPeakGreenRGB, frequencyPeakY, frequencyPeakcb,
-                     frequencyPeakcr, maxPeakRed, maxPeakBlue, maxPeakGreen, upperRightAvgBlue,
+                     frequencyPeakcr, upperRightAvgBlue,
                      upperRightAvgGreen, upperRightAvgRed, upperRightHFBlue, upperRightHFGreen, upperRightHFRed,
                      upperRightHistGreen, upperRightHistGreen, upperRightHistBlue, upperLeftAvgRed, upperLeftAvgGreen,
                      upperLeftAvgBlue, upperLeftHFGreen, upperLeftHFBlue, upperLeftHFRed, upperLeftHistBlue,
@@ -178,6 +184,7 @@ class ImageCollection:
                      lowerRightHFGreen, lowerRightHFRed, lowerRightHFBlue, lowerRightHistBlue, lowerRightHistGreen,
                      lowerRightHistRed, lowerLeftAvgGreen, lowerLeftAvgBlue, lowerLeftAvgRed, lowerLeftHFGreen,
                      lowerLeftHFBlue, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen, lowerLeftHistRed]
+
         functions_text = ["mean, std, avgRed, avgGreen, avgBlue, avgY, avgcb, avgcr, frequencyPeakBlueRGB,"
                      "frequencyPeakRedRGB, frequencyPeakGreenRGB, frequencyPeakY, frequencyPeakcb,"
                      "frequencyPeakcr, maxPeakRed, maxPeakBlue, maxPeakGreen, upperRightAvgBlue,"
@@ -188,15 +195,19 @@ class ImageCollection:
                      "lowerRightHFGreen, lowerRightHFRed, lowerRightHFBlue, lowerRightHistBlue, lowerRightHistGreen,"
                      "lowerRightHistRed, lowerLeftAvgGreen, lowerLeftAvgBlue, lowerLeftAvgRed, lowerLeftHFGreen,"
                      "lowerLeftHFBlue, lowerLeftHFRed, lowerLeftHistBlue, lowerLeftHistGreen, lowerLeftHistRed"]
+
         coast_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathCoast])
         forest_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathForest])
         street_img = np.array([np.array(skiio.imread(image)) for image in ImageCollection._pathStreet])
+
         street_component = np.zeros((street_img.shape[0]))
         forest_component = np.zeros((forest_img.shape[0]))
         coast_component = np.zeros((coast_img.shape[0]))
+
         values_s = np.empty(street_img.shape[0])
         values_f = np.empty(forest_img.shape[0])
         values_c = np.empty(coast_img.shape[0])
+
         for func in functions:
             for id, img in enumerate(street_img):
                 street_component[id] = func(img)
@@ -204,21 +215,26 @@ class ImageCollection:
                 forest_component[id] = func(img)
             for id, img in enumerate(street_img):
                 coast_component[id] = func(img)
+
             values_s = np.vstack([values_s, street_component])
             values_f = np.vstack([values_f, forest_component])
             values_c = np.vstack([values_c, coast_component])
+
         mat_cov_coast = np.cov(values_c)
         mat_cov_forest = np.cov(values_f)
         mat_cov_street = np.cov(values_s)
         mat_p_coast = np.zeros_like(mat_cov_coast)
         mat_p_forest = np.zeros_like(mat_cov_forest)
         mat_p_street = np.zeros_like(mat_cov_street)
+
         for i in range(mat_cov_street.shape[0]):
             for j in range(mat_cov_street.shape[1]):
                 mat_p_coast[i][j] = 1 - (mat_cov_coast[i][j] / (np.sqrt(mat_cov_coast[i][i]) * (np.sqrt(mat_cov_coast[j][j]))))
                 mat_p_forest[i][j] = 1 - (mat_cov_forest[i][j] / (np.sqrt(mat_cov_forest[i][i]) * (np.sqrt(mat_cov_forest[j][j]))))
                 mat_p_street[i][j] = 1 - (mat_cov_street[i][j] / (np.sqrt(mat_cov_street[i][i]) * (np.sqrt(mat_cov_street[j][j]))))
+
         print(functions_text)
+
         ax1 = plt.subplot(3, 1, 1)
         ax1.matshow(mat_p_coast)
         ax1.title.set_text('1-p coast correlation')
@@ -228,6 +244,7 @@ class ImageCollection:
         ax3 = plt.subplot(3, 1, 3)
         ax3.matshow(mat_p_street)
         ax3.title.set_text('1-p street correlation')
+
 
     def images_display(indexes):
         """

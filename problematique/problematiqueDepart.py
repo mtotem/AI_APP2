@@ -23,10 +23,10 @@ def main():
     #print(im_list)
     # ImageCollection.view_scatter()
     # data extract
-    NN.NN()
+    #NN.NN()
     #Bayes.Bayes()
     #PPV.PPV(1, 20)
-    #ImageCollection.covariance()
+    ImageCollection.covariance()
     # ImageCollection.images_display(im_list)
     # ImageCollection.view_histogrammes(im_list)
     plt.show()
